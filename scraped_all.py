@@ -6,10 +6,10 @@ import re
 from datetime import datetime
 
 #スクレイピングしたデータを入れる表を作成
-list_df = pd.DataFrame(columns=['曲名', '歌手名', '作詞者名', '作曲者名', '発売日', '表示回数', '歌詞'])
+list_df = pd.DataFrame(columns=['曲名', '発売日', '表示回数', '歌詞'])
 i = 0
 
-for artist_index in range(1,31971):
+for artist_index in range(1,12795):
     for page in range(1,2): #各アーティストから1ページずつとってくる
         base_url = 'https://www.uta-net.com'
 
@@ -32,11 +32,7 @@ for artist_index in range(1,31971):
             # 歌手名を取得
             song_singer = soup.find('h3').text
 
-            # 作詞者名を取得
-            song_lyricwriter = soup.find('h4').text
-
-            # 作曲者名を取得
-            song_musicwriter = soup.find('th5').text
+            time.sleep(5)
 
             # 発売日、表示回数などを取得
             detail = soup.find('p', class_="detail").text
@@ -57,14 +53,14 @@ for artist_index in range(1,31971):
             
 
             #サーバーに負荷を与えないため1秒待機
-            time.sleep(1)
+            time.sleep(10)
             print('ロードを終了しました'+str(i)+'!')
             i += 1
 
             #取得した歌詞を表に追加
-            tmp_se = pd.DataFrame([[song_name], [song_singer], [song_lyricwriter], [song_musicwriter], [release_date], [impressions], [song_lyric]], index=list_df.columns).T
+            tmp_se = pd.DataFrame([[song_name], [release_date], [impressions], [song_lyric]], index=list_df.columns).T
             list_df = list_df.append(tmp_se,ignore_index=True)
-            print(list_df)
+            
             
         print('ページを更新しました')
 
